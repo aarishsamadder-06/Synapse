@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
-from .config import API_VERSION, FRONTEND_ORIGINS, MODEL_NAME
+from .config import API_VERSION, MODEL_NAME
 from .feature_extractor import FeatureExtractor
 from .image_processor import process_image
 from .schemas import CompareResponse, HealthResponse
@@ -29,9 +29,11 @@ async def lifespan(_: FastAPI):
 app = FastAPI(title="SYNAPSE API", version=API_VERSION, lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=FRONTEND_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["GET", "POST"],
+    allow_origins=[
+        "http://localhost:5173",
+        "https://synapse-fs95.vercel.app",
+    ],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
